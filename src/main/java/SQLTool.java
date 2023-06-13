@@ -191,4 +191,25 @@ public class SQLTool {
 
         System.out.println("Report generated successfully. Saved as " + fileName);
     }
+
+    private static void testSQLInjection(Connection conn) throws SQLException {
+        System.out.print("Enter the username: ");
+        Scanner scanner = new Scanner(System.in);
+        String username = scanner.nextLine();
+
+        String query = "SELECT * FROM users WHERE username = '" + username + "'";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet resultSet = stmt.executeQuery();
+
+        if (resultSet.next()) {
+            System.out.println("User found:");
+            System.out.println("Username: " + resultSet.getString("username"));
+            System.out.println("Email: " + resultSet.getString("email"));
+        } else {
+            System.out.println("User not found.");
+        }
+
+        resultSet.close();
+        stmt.close();
+    }
 }
