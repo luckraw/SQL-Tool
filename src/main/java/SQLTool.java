@@ -26,7 +26,8 @@ public class SQLTool {
                 System.out.println("3. Data Update");
                 System.out.println("4. Data Deletion");
                 System.out.println("5. Generate Report");
-                System.out.println("6. Exit");
+                System.out.println("6. Test SQL Injection");
+                System.out.println("7. Exit");
                 System.out.print("Choose an option: ");
 
                 Scanner scanner = new Scanner(System.in);
@@ -50,6 +51,9 @@ public class SQLTool {
                         generateReport(conn);
                         break;
                     case 6:
+                        testSQLInjection(conn);
+                        break;
+                    case 7:
                         System.out.println("Exiting SQLTool...");
                         conn.close();
                         return;
@@ -197,8 +201,10 @@ public class SQLTool {
         Scanner scanner = new Scanner(System.in);
         String username = scanner.nextLine();
 
-        String query = "SELECT * FROM users WHERE username = '" + username + "'";
+        String query = "SELECT * FROM users WHERE username = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, username);
+
         ResultSet resultSet = stmt.executeQuery();
 
         if (resultSet.next()) {
